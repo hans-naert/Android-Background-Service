@@ -87,6 +87,11 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, MyService::class.java)
             unbindService(connection) // unbind Service
         }
+
+        findViewById<Button>(R.id.intentServiceButton).setOnClickListener {
+            MyIntentService.startActionFoo(this, "param1", "param2")
+        }
+
     }
 
 
