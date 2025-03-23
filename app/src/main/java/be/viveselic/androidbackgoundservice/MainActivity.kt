@@ -1,9 +1,13 @@
 package be.viveselic.androidbackgoundservice
 
 import android.annotation.SuppressLint
+import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
+import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.Handler
+import android.os.IBinder
 import android.os.Message
 import android.widget.Button
 import android.widget.TextView
@@ -23,6 +27,19 @@ class MainActivity : AppCompatActivity() {
             when (msg.what) {
                 updateText -> findViewById<TextView>(R.id.textView).text = "Nice to meet you"
             }
+        }
+    }
+
+    lateinit var downloadBinder: MyService.DownloadBinder
+    private val connection = object : ServiceConnection {
+        override fun onServiceConnected(name: ComponentName, service:
+        IBinder
+        ) {
+            downloadBinder = service as MyService.DownloadBinder
+            downloadBinder.startDownload()
+            downloadBinder.getProgress()
+        }
+        override fun onServiceDisconnected(name: ComponentName) {
         }
     }
 
@@ -49,6 +66,15 @@ class MainActivity : AppCompatActivity() {
         findViewById<Button>(R.id.stopServiceButton).setOnClickListener {
             val intent = Intent(this, MyService::class.java)
             stopService(intent)
+        }
+
+        findViewById<Button>(R.id.bindButton).setOnClickListener {
+            val intent = Intent(this, MyService::class.java)
+            bindService(intent, connection, Context.BIND_AUTO_CREATE)
+        }
+        findViewById<Button>(R.id.unbindButton).setOnClickListener {
+            val intent = Intent(this, MyService::class.java)
+            unbindService(connection) // unbind Service
         }
     }
 
