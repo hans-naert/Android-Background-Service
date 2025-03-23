@@ -1,6 +1,7 @@
 package be.viveselic.androidbackgoundservice
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
@@ -40,6 +41,14 @@ class MainActivity : AppCompatActivity() {
                 msg.what = updateText
                 handler.sendMessage(msg) // send the Message object
             }
+        }
+        findViewById<Button>(R.id.startServiceButton).setOnClickListener {
+            val intent = Intent(this, MyService::class.java)
+            startService(intent)
+        }
+        findViewById<Button>(R.id.stopServiceButton).setOnClickListener {
+            val intent = Intent(this, MyService::class.java)
+            stopService(intent)
         }
     }
 
